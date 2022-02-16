@@ -1,19 +1,26 @@
-import Button from 'react-bootstrap/Button';
+import { useEffect } from 'react';
+
+import BlocksContainer from './components/complex/BlocksContainer/BlocksContainer';
 
 
 import './App.scss';
 
 
 export default function App() {
+
+
+
+	  
+
 	return (
-		<div className="App">
-			<header className="App-header">
-				
-				
-				<Button variant="dang">Bootstrap button</Button>
-				
-				
-			</header>
+		<div className="App center-inner">
+			
+			
+
+			<BlocksContainer />
+
+
+
 		</div>
 	);
 }

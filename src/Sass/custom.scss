@@ -1,7 +1,16 @@
+$white: #ffffff;
+
+$color-bg: #fafafa;
+$color-text: #1d1d1d;
+$color-shadow: #c6c6c6;
+$color-icons: #b4b4b4;
+
 
 $theme-colors: (
-    "info": tomato,
-    "dang": teal
+    "bg-main": $color-bg,
+    "color-main": $color-text,
 );
+
+
 
 @import "~bootstrap/scss/bootstrap";
