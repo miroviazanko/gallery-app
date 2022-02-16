@@ -15,7 +15,7 @@ export default function BlocksContainer(props) {
     return (
         <Container fluid="md">
 
-            <Row className='gx-4 gx-lg-5'>
+            <Row className='g-4 g-lg-5'>
                 <Col xs={12} sm={6} md={4} lg={3}>
                     <Item type={itemType}/>
                 </Col>
