@@ -1,0 +1,25 @@
+@import '../../../Sass/custom.scss';
+
+
+.addOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100vw;
+    height: 100vh;
+    background: $color-bg-overlay;
+    & .overlayBanner {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        height: fit-content;
+        max-width: 560px;
+        background-color: $white;
+        border-radius: 1rem;
+        padding: 3rem;
+    }
+}

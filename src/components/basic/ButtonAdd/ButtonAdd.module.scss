@@ -1,0 +1,15 @@
+@import '../../../Sass/custom.scss';
+
+
+.buttonAdd {
+    background: $color-text;
+    width: 100%;
+    //max-width: 500px;
+    border-radius: 4px;
+    border: 0;
+    color: $white;
+    transition: color .3s ease-out;   
+    &:hover {
+        color: $color-shadow;
+    }
+}

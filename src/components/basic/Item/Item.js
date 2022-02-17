@@ -4,15 +4,14 @@ import img from '../../../assets/img/pexels-erika-ortiz-10895939.jpeg';
 
 
 
-export default function Item(props) {
-    
-    const type = props.type;
+export default function Item({type}) {
+
 
     const typeCategory = type === 'category' ? true : false;
 
     return (
         
-        <div className={styles.itemWrapper}>
+        <div className={`${styles.itemWrapper}`}>
             <img src={img} alt="pic" />
 
             { typeCategory &&
