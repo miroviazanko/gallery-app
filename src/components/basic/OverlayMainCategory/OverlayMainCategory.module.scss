@@ -1,0 +1,23 @@
+@import '../../../Sass/custom.scss';
+
+
+.overlayMainCategory {
+    position: relative;
+    & label {
+        position: absolute;
+        top: -.8rem;
+        left: 1rem;
+        background-color: $white;
+        padding: 0 1rem;
+        &::after {
+            content: "*";
+            margin-left: .1rem;
+        }
+    }
+    & input {
+        padding: 1rem;
+        border: 1px solid $color-borders;
+        width: 100%;
+        border-radius: 4px;
+    }
+}

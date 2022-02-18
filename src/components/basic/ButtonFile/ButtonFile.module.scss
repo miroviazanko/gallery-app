@@ -1,0 +1,13 @@
+@import '../../../Sass/custom.scss';
+
+.buttonFile {
+    & input[type="file"] {
+        display: none;
+    }
+    & .coverBtn {
+        background-color: $white;
+        border: 1px solid $color-text;
+        padding: .5rem 1rem;
+        border-radius: 4px;
+    }
+}

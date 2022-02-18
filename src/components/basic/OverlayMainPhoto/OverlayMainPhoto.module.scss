@@ -1,0 +1,10 @@
+@import '../../../Sass/custom.scss';
+
+
+.overlayMainPhoto {
+    border: 1px solid $color-borders;
+    border-radius: 4px;
+    & .dragDrop {
+        cursor: copy;
+    }
+}

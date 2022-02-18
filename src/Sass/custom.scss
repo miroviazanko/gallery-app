@@ -5,10 +5,15 @@ $color-text: #1d1d1d;
 $color-shadow: #c6c6c6;
 $color-icons: #b4b4b4;
 $color-bg-overlay: #404040ae;
+$color-borders: #dddddd;
+$color-warning: rgb(253, 142, 142);
+
 
 $theme-colors: (
     "bg-main": $color-bg,
     "color-main": $color-text,
+    "color-shadow": $color-shadow,
+    "warning": $color-warning,
 );
 
 

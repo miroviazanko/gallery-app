@@ -3,8 +3,8 @@
 
 .ldsDualRing {
     display: inline-block;
-    width: 80px;
-    height: 80px;
+    width: 100%;
+    margin-top: 5rem;
   }
   .ldsDualRing:after {
     content: " ";
@@ -16,6 +16,7 @@
     border: 2px solid $color-shadow;
     border-color: $color-shadow transparent $color-shadow transparent;
     animation: ldsDualRing 1.2s linear infinite;
+    margin: auto;
   }
   @keyframes ldsDualRing {
     0% {

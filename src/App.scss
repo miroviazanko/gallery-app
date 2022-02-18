@@ -4,7 +4,7 @@
 
 .App {
   text-align: center;
-  min-width: 100vw;
+  width: 100%;
   min-height: 100vh;
   background-color: $color-bg;
   & h6 {
@@ -16,12 +16,19 @@
   & a {
     text-decoration: none;
   }
+  & .btn-close:focus {
+    box-shadow: 0;
+  }
+}
+* {
+  outline: 0;
 }
 .center-inner {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 
 @media ( min-width: 768px ) {
  

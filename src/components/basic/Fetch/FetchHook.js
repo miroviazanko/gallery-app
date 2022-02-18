@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 
-
 export function useFetch(uri, method) {
 
     const [ data, setData ] = useState();
