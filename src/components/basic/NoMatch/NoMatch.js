@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
 
-import styles from './NoMatch.module.scss';
-
 import { CgDanger } from 'react-icons/cg'
 import { IoIosArrowRoundBack } from 'react-icons/io'
 import Container from 'react-bootstrap/Container';

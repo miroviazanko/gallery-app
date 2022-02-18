@@ -1,5 +1,5 @@
-import { useReducer, useState } from 'react';
-import { Routes, Route, Link } from "react-router-dom";
+import { useReducer } from 'react';
+import {  Link } from "react-router-dom";
 
 import styles from './BlocksContainer.module.scss';
 
@@ -15,7 +15,7 @@ import OverlayMainCategory from '../../basic/OverlayMainCategory/OverlayMainCate
 import OverlayMainPhoto from '../../basic/OverlayMainPhoto/OverlayMainPhoto';
 import ButtonAdd from '../../basic/ButtonAdd/ButtonAdd';
 
-import { useFetch } from '../../basic/Fetch/FetchHook';
+//import { useFetch } from '../../basic/Fetch/FetchHook';
 
 
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 
 
@@ -16,8 +16,8 @@ import Loading from './components/basic/Loading/Loading';
 
 export default function App() {
 
-	const [ apiUrl, setApiUrl] = useState('http://api.programator.sk/');
-	const [ apiPreview, setApiPreview ] = useState(`${apiUrl}/images/400x0/`)
+	const [ apiUrl] = useState('http://api.programator.sk/');
+	const [ apiPreview ] = useState(`${apiUrl}/images/400x0/`)
 	const [ datas, setDatas ] = useState();
 
 	const { loading, data, error } = useFetch(`${apiUrl}gallery`, "GET")
