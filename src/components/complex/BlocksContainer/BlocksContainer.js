@@ -1,4 +1,5 @@
-import { useReducer } from 'react';
+import { useReducer/* , useState, useEffect */ } from 'react';
+import { useFetch } from '../../basic/Fetch/FetchHook';
 import {  Link } from "react-router-dom";
 
 import styles from './BlocksContainer.module.scss';
@@ -14,31 +15,33 @@ import Modal from 'react-bootstrap/Modal';
 import OverlayMainCategory from '../../basic/OverlayMainCategory/OverlayMainCategory';
 import OverlayMainPhoto from '../../basic/OverlayMainPhoto/OverlayMainPhoto';
 import ButtonAdd from '../../basic/ButtonAdd/ButtonAdd';
-
-//import { useFetch } from '../../basic/Fetch/FetchHook';
-
-
+import Counter from '../../basic/Counter/Counter';
+import { IoIosArrowRoundBack } from 'react-icons/io'
 
 
 
-export default function BlocksContainer({type, apiPreview, loading, data, path, error}) {
-
-    const [show, toggleModal] = useReducer( state => !state, false);
-
-    
-
-    
 
 
-    const items = data ? data.map( ( cat,i ) => {
+
+
+export default function BlocksContainer({type, apiPreview, path, object}) {
+
+    const [show, toggleModal] = useReducer( state => !state, false);    
+
+    const { data /* loading, error */ } = useFetch(path, "GET")    
+
+
+    const items = data ? data[object].map( ( cat,i ) => {
 
         let existsPreview = "image" in cat;
-        let path = existsPreview ? apiPreview + cat.image.fullpath : null;
+        let path = existsPreview ? apiPreview + cat.image.fullpath : apiPreview + cat.fullpath;
+
 
         return (
                      
-                <Col xs={12} sm={6} md={4} lg={3} key={i}>
-                    <Link to={cat.path}>
+                <Col xs={12} sm={6} md={4} lg={3} key={i} >                    
+                    <Link to={cat.path} className='position-relative'>
+                        { type === "category" && <Counter className={styles.blockCounter}/> }
                         <Item label={cat.name} type={type} imgPath={path}/>
                     </Link>
                 </Col>
@@ -46,11 +49,26 @@ export default function BlocksContainer({type, apiPreview, loading, data, path, 
         )
     }) : null
 
-
+    const subtitle = () => {
+        if ( type === 'gallery' && data ) {
+            return (
+                <Link to="/">
+                        <h5 className={`d-flex align-items-center ${styles.categoryName}`}>
+                            <IoIosArrowRoundBack className='me-3'/>{data.gallery.name}
+                        </h5>
+                </Link>
+            )
+        } else {
+            return (
+                <h5>Kategórie</h5>
+            )
+        }
+    }
 
 
     return (
         <>
+            <div className='my-4'>{subtitle()}</div>            
 
             <Row className='g-4 g-lg-5'>
 
@@ -63,17 +81,16 @@ export default function BlocksContainer({type, apiPreview, loading, data, path, 
             </Row>
             
 
-            <Modal show={show} onHide={ () => toggleModal() } className={styles.bootstrapModal}
-                centered>
-            <div className='p-4'>
-                    <Modal.Header className='p-0 border-0' closeButton>
-                        <Modal.Title>Pridať {type}</Modal.Title>
-                    </Modal.Header>
-                    <OverlayMainCategory />
-                    <OverlayMainPhoto />
-                    <ButtonAdd label="Pridať"/>
+            <Modal show={show} onHide={ () => toggleModal() } className={styles.bootstrapModal} centered>
+                <div className='p-4'>
+                        <Modal.Header className='p-0 border-0' closeButton>
+                            <Modal.Title>Pridať {type}</Modal.Title>
+                        </Modal.Header>
+                        <OverlayMainCategory />
+                        <OverlayMainPhoto />
+                        <ButtonAdd label="Pridať"/>
 
-            </div>
+                </div>
             </Modal>
                
         </>

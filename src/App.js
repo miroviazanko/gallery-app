@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route /* , Navigate */ } from "react-router-dom";
 
 
 
@@ -16,19 +16,21 @@ import Loading from './components/basic/Loading/Loading';
 
 export default function App() {
 
-	const [ apiUrl] = useState('http://api.programator.sk/');
+	const [ apiUrl] = useState('http://api.programator.sk');
+	const [ apiGalleryUrl] = useState(`${apiUrl}/gallery`);
 	const [ apiPreview ] = useState(`${apiUrl}/images/400x0/`)
 	const [ datas, setDatas ] = useState();
 
-	const { loading, data, error } = useFetch(`${apiUrl}gallery`, "GET")
-
+	const { loading, data, error } = useFetch(`${apiGalleryUrl}`, "GET")
+	
+	
 	useEffect( () => {
 		setDatas(data)
 	}, [data]);
 	
-	console.log(datas);
-	
-	//const { loading, data, error } = useFetch("http://api.programator.sk/gallery/wefa%20fwf", "DELETE")
+	//console.log(data)
+
+	//const { loading, data, error } = useFetch("http://api.programator.sk/gallery/sea%20animals", "DELETE")
 
 	const routes = datas && datas.galleries.map( ( (gallery, i) => {
 		
@@ -39,12 +41,11 @@ export default function App() {
 				   key={i} 
 				   element={
 							<BlocksContainer 
-								loading={loading}
-								data={data.galleries}
-								error={error}
 								apiPreview={apiPreview} 
 								type="gallery"
-								path={path}/>
+								path={apiGalleryUrl + '/' + path}
+								object="images"
+								key={i}/>
 						} >
 								
 			</Route>
@@ -56,14 +57,11 @@ export default function App() {
 	return (
 		<div className="App">
 
-				
-
 				<Container fluid="md" className='text-start py-5'>				
 					<h1 className='pt-5 pb-3'>Fotogaléria</h1>
-					<h5>Kategorie</h5>
+					
 
-
-					{ loading ? <Loading /> : null }
+					{ loading && !error ? <Loading /> : null }
 
 					{  datas && 
 						
@@ -71,11 +69,11 @@ export default function App() {
 							<Route path="/" 
 									element={
 										<BlocksContainer 
-											loading={loading}
-											data={datas.galleries}
-											error={error}
 											apiPreview={apiPreview} 
-											type="category"/>
+											type="category"
+											path={`${apiGalleryUrl}`}
+											object="galleries"
+											key={.5}/>
 									} >
 								
 							</Route>
@@ -83,15 +81,15 @@ export default function App() {
 							{ routes }
 							
 							<Route path="*" element={<NoMatch />}></Route>
+							{/* <Route path="/error" element={<NoMatch />}></Route> */}
 						</Routes> 
 						
 					}
 
+					{ /* error && <Navigate replace to="/error" element={<NoMatch/>} /> */ }
+					
 					
 				</Container>
-	
-				
-
 
 		</div>
 	);

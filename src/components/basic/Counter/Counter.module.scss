@@ -1,0 +1,17 @@
+@import '../../../Sass/custom.scss';
+
+
+.counter {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 20;
+    background: $color-bg-overlay;
+    border-radius: 12px;
+    width: max-content;
+    padding: .2rem .5rem;
+    & p {
+        color: $white;
+        margin: 0;
+    }
+}

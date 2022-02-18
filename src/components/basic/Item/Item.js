@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import styles from './Item.module.scss';
 
 import img from '../../../assets/img/placeholder.png';
@@ -6,10 +8,24 @@ import img from '../../../assets/img/placeholder.png';
 
 export default function Item({label, type, imgPath}) {
 
+    const [ imgUrl, setImgUrl ] = useState(imgPath)
+
+    function testImage(URL) {
+        var tester=new Image();
+        //tester.onload=imageFound;
+        tester.onerror=imageNotFound;
+        tester.src=URL;
+    }
+    
+    function imageNotFound(imgPath) {
+        setImgUrl('');
+    }
+
+    testImage(imgPath);
 
     const typeCategory = type === 'category' ? true : false;
 
-    const imgSrc = imgPath ? imgPath : img;
+    const imgSrc = imgUrl ? imgUrl : img;
 
     return (
         
