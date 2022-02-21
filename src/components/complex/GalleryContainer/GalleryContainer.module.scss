@@ -1,0 +1,15 @@
+@import '../../../Sass/custom.scss';
+
+
+
+.bootstrapModal {
+    & .modal-content {
+        padding: 3rem;
+    }
+    & button:focus {
+        box-shadow: 0;
+    }
+}
+.categoryName {
+    color: $color-text;
+}

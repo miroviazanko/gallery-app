@@ -29,3 +29,7 @@ export function useFetch(uri, method) {
        error
    }
 };
+
+export async function fetchDatas( uri, method, setState, state ) {
+    
+}

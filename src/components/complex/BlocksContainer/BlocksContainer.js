@@ -1,5 +1,5 @@
-import { useReducer/* , useState, useEffect */ } from 'react';
-import { useFetch } from '../../basic/Fetch/FetchHook';
+import { useReducer/* , useEffect,  useState */} from 'react';
+//import { useFetch } from '../../basic/Fetch/FetchHook';
 import {  Link } from "react-router-dom";
 
 import styles from './BlocksContainer.module.scss';
@@ -15,7 +15,6 @@ import Modal from 'react-bootstrap/Modal';
 import OverlayMainCategory from '../../basic/OverlayMainCategory/OverlayMainCategory';
 import OverlayMainPhoto from '../../basic/OverlayMainPhoto/OverlayMainPhoto';
 import ButtonAdd from '../../basic/ButtonAdd/ButtonAdd';
-import Counter from '../../basic/Counter/Counter';
 import { IoIosArrowRoundBack } from 'react-icons/io'
 
 
@@ -24,30 +23,32 @@ import { IoIosArrowRoundBack } from 'react-icons/io'
 
 
 
-export default function BlocksContainer({type, apiPreview, path, object}) {
+export default function BlocksContainer({type, object, data, preview, apiUrl}) {
 
-    const [show, toggleModal] = useReducer( state => !state, false);    
+    const [show, toggleModal] = useReducer( state => !state, false);
+    
 
-    const { data /* loading, error */ } = useFetch(path, "GET")    
-
-
-    const items = data ? data[object].map( ( cat,i ) => {
-
+    const items = data.galleries ? data.galleries.map( ( cat,i ) => {
+        
         let existsPreview = "image" in cat;
-        let path = existsPreview ? apiPreview + cat.image.fullpath : apiPreview + cat.fullpath;
+        let imgPath = existsPreview ? preview + '/' + cat.image.fullpath : preview + '/' + cat.fullpath;
+
+        let galleryPath = apiUrl + '/' + cat.path;
 
 
-        return (
-                     
+        return (                     
                 <Col xs={12} sm={6} md={4} lg={3} key={i} >                    
                     <Link to={cat.path} className='position-relative'>
-                        { type === "category" && <Counter className={styles.blockCounter}/> }
-                        <Item label={cat.name} type={type} imgPath={path}/>
+                        <Item label={cat.name} galleryPath={galleryPath} imgPath={imgPath} type={type}/>
                     </Link>
-                </Col>
-                         
+                </Col>                        
         )
-    }) : null
+    }) : null 
+
+
+    
+
+
 
     const subtitle = () => {
         if ( type === 'gallery' && data ) {

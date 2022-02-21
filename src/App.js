@@ -1,53 +1,73 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect/* , useReducer */ } from 'react';
 import { Routes, Route /* , Navigate */ } from "react-router-dom";
 
 
 
 import BlocksContainer from './components/complex/BlocksContainer/BlocksContainer';
+import GalleryContainer from './components/complex/GalleryContainer/GalleryContainer';
 import Container from 'react-bootstrap/Container';
 import NoMatch from './components/basic/NoMatch/NoMatch';
-import { useFetch } from './components/basic/Fetch/FetchHook';
 
 
 
 import './App.scss';
-import Loading from './components/basic/Loading/Loading';
+//import Loading from './components/basic/Loading/Loading';
 
 
 export default function App() {
 
 	const [ apiUrl] = useState('http://api.programator.sk');
 	const [ apiGalleryUrl] = useState(`${apiUrl}/gallery`);
-	const [ apiPreview ] = useState(`${apiUrl}/images/400x0/`)
-	const [ datas, setDatas ] = useState();
+	const [ apiImage ] = useState(`${apiUrl}/images/400x0`)
 
-	const { loading, data, error } = useFetch(`${apiGalleryUrl}`, "GET")
-	
+	const [ categories, setCategories ] = useState([])
+
 	
 	useEffect( () => {
-		setDatas(data)
-	}, [data]);
+
+		const reqAccountAndTransactions = async (uri, method) => {
+		
+			const fetchCategories = await fetch(uri, {
+					"method": method,
+					"headers": {
+						"Content-Type":"application/json"
+					},
+					"mode": 'cors',
+					"cache": 'default'
+			}).then(response => response.json())
+			.then( (data) => setCategories( data ) )
+			//.catch( setError );
+
+
+		}
+		reqAccountAndTransactions(apiGalleryUrl, "GET");
+
+	}, [ apiGalleryUrl ] );
 	
-	//console.log(data)
+
+
 
 	//const { loading, data, error } = useFetch("http://api.programator.sk/gallery/sea%20animals", "DELETE")
 
-	const routes = datas && datas.galleries.map( ( (gallery, i) => {
+	const routes = categories.length && categories.galleries.map( ( (gallery, i) => {
 		
 		const path = gallery.path;
+		const name = gallery.name;
+
+		console.log(path)
 
 		return (
 			<Route path={path}
 				   key={i} 
 				   element={
-							<BlocksContainer 
-								apiPreview={apiPreview} 
+							<GalleryContainer 
 								type="gallery"
-								path={apiGalleryUrl + '/' + path}
-								object="images"
+								apiUrl={apiUrl}
+								preview={apiImage}
+								path={path}
+								name={name}
 								key={i}/>
-						} >
-								
+						} >								
 			</Route>
 		)
 	} ))
@@ -61,18 +81,17 @@ export default function App() {
 					<h1 className='pt-5 pb-3'>Fotogaléria</h1>
 					
 
-					{ loading && !error ? <Loading /> : null }
-
-					{  datas && 
+					{ /* loading && !error ? <Loading /> : null */ }
 						
 						<Routes>
 							<Route path="/" 
 									element={
 										<BlocksContainer 
-											apiPreview={apiPreview} 
 											type="category"
-											path={`${apiGalleryUrl}`}
 											object="galleries"
+											data={categories}
+											apiUrl={apiGalleryUrl}
+											preview={apiImage}
 											key={.5}/>
 									} >
 								
@@ -81,10 +100,10 @@ export default function App() {
 							{ routes }
 							
 							<Route path="*" element={<NoMatch />}></Route>
-							{/* <Route path="/error" element={<NoMatch />}></Route> */}
-						</Routes> 
+							{ /*<Route path="/error" element={<NoMatch />}></Route> */}
+						</Routes>
 						
-					}
+					
 
 					{ /* error && <Navigate replace to="/error" element={<NoMatch/>} /> */ }
 					
