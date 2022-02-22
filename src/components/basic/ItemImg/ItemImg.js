@@ -1,28 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-import styles from './Item.module.scss';
+import styles from './ItemImg.module.scss';
 
 import img from '../../../assets/img/placeholder.png';
-import Counter from '../Counter/Counter';
 
 
-export default function Item({label, type, imgPath, galleryPath}) {
+
+export default function ItemImg({label, type, imgPath}) {
 
     const [ imgUrl, setImgUrl ] = useState(imgPath)
-    const [ count, setCount ] = useState();
-
-    useEffect(() => {
-      const gallery = async(path) => await fetch( path )
-            .then( response => response.json() )
-            .then( data => setCount( data.images.length ) )
-    
-        gallery(galleryPath)
-
-      return () => {
-        
-      }
-    }, [galleryPath])
-    
 
     function testImage(URL) {
         var tester=new Image();
@@ -43,8 +29,7 @@ export default function Item({label, type, imgPath, galleryPath}) {
 
     return (
         
-        <div className={`${styles.itemWrapper} position-relative`}>
-            <Counter count={count} />
+        <div className={`${styles.itemWrapper}`}>
             <img src={imgSrc} alt="pic" />
 
             { typeCategory &&

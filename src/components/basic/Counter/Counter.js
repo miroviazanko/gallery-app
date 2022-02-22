@@ -6,7 +6,7 @@ export default function Counter({count}) {
 
     return (
         <div className={styles.counter}>
-            <p>8 counter</p>
+            <p>{count} counter</p>
         </div>
     )
 

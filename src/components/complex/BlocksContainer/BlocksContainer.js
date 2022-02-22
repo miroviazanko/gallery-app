@@ -9,13 +9,14 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import Item from '../../basic/Item/Item';
+import ItemImg from '../../basic/ItemImg/ItemImg';
 import ItemAdd from '../../basic/ItemAdd/ItemAdd';
 
 import Modal from 'react-bootstrap/Modal';
 import OverlayMainCategory from '../../basic/OverlayMainCategory/OverlayMainCategory';
 import OverlayMainPhoto from '../../basic/OverlayMainPhoto/OverlayMainPhoto';
 import ButtonAdd from '../../basic/ButtonAdd/ButtonAdd';
-import Counter from '../../basic/Counter/Counter';
+//import Counter from '../../basic/Counter/Counter';
 import { IoIosArrowRoundBack } from 'react-icons/io'
 
 
@@ -34,15 +35,20 @@ export default function BlocksContainer({type, apiPreview, path, object}) {
     const items = data ? data[object].map( ( cat,i ) => {
 
         let existsPreview = "image" in cat;
-        let path = existsPreview ? apiPreview + cat.image.fullpath : apiPreview + cat.fullpath;
+        let previewPath = existsPreview ? apiPreview + cat.image.fullpath : apiPreview + cat.fullpath;
+        let galleryPath = path + "/" + cat.path;
 
+        console.log(galleryPath)
 
         return (
                      
                 <Col xs={12} sm={6} md={4} lg={3} key={i} >                    
                     <Link to={cat.path} className='position-relative'>
-                        { type === "category" && <Counter className={styles.blockCounter}/> }
-                        <Item label={cat.name} type={type} imgPath={path}/>
+                        { /* type === "category" && <Counter className={styles.blockCounter}/> */ }
+                        { type === "category" ?
+                            <Item label={cat.name} type={type} imgPath={previewPath} galleryPath={galleryPath}/>
+                            : <ItemImg label={cat.name} type={type} imgPath={previewPath}/>
+                        }
                     </Link>
                 </Col>
                          
