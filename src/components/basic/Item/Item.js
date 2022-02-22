@@ -1,57 +1,53 @@
 import { useState, useEffect } from 'react';
 
 import styles from './Item.module.scss';
+import { checkImage } from '../../../Helpers/checkImg';
 
 import img from '../../../assets/img/placeholder.png';
 import Counter from '../Counter/Counter';
+import Trash from '../Trash/Trash';
 
 
-export default function Item({label, type, imgPath, galleryPath}) {
+
+export default function Item({label, type, imgPath, galleryPath, handleTrashClick}) {
 
     const [ imgUrl, setImgUrl ] = useState(imgPath)
     const [ count, setCount ] = useState();
+    const [ itemType ] = useState(type === "category");
+
 
     useEffect(() => {
-      const gallery = async(path) => await fetch( path )
-            .then( response => response.json() )
-            .then( data => setCount( data.images.length ) )
-    
-        gallery(galleryPath)
+     
+        if ( itemType ) {
+            const gallery = async(path) => await fetch( path )
+                    .then( response => response.json() )
+                    .then( data => setCount( data.images.length ) )
+            
+            gallery(galleryPath)
+        }
+
+        checkImage(imgPath, setImgUrl);
 
       return () => {
         
       }
     }, [galleryPath])
-    
-
-    function testImage(URL) {
-        var tester=new Image();
-        //tester.onload=imageFound;
-        tester.onerror=imageNotFound;
-        tester.src=URL;
-    }
-    
-    function imageNotFound(imgPath) {
-        setImgUrl('');
-    }
-
-    testImage(imgPath);
-
-    const typeCategory = type === 'category' ? true : false;
 
     const imgSrc = imgUrl ? imgUrl : img;
 
     return (
         
         <div className={`${styles.itemWrapper} position-relative`}>
-            <Counter count={count} />
+            
+            { itemType && <Counter count={count} /> }
             <img src={imgSrc} alt="pic" />
 
-            { typeCategory &&
+            { itemType &&
                 <div className={`${styles.caption} center-inner`}>
                     <h6>{label}</h6>
                 </div>
             }
+            <Trash galleryPath={galleryPath} handleTrashClick={handleTrashClick}/>
 
         </div>
         

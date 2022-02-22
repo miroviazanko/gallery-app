@@ -1,35 +1,25 @@
-import { useReducer/* , useState, useEffect */ } from 'react';
+import { useReducer , useState} from 'react';
 import { useFetch } from '../../basic/Fetch/FetchHook';
 import {  Link } from "react-router-dom";
 
 import styles from './BlocksContainer.module.scss';
 
-
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
 import Item from '../../basic/Item/Item';
-import ItemImg from '../../basic/ItemImg/ItemImg';
 import ItemAdd from '../../basic/ItemAdd/ItemAdd';
-
-import Modal from 'react-bootstrap/Modal';
-import OverlayMainCategory from '../../basic/OverlayMainCategory/OverlayMainCategory';
-import OverlayMainPhoto from '../../basic/OverlayMainPhoto/OverlayMainPhoto';
-import ButtonAdd from '../../basic/ButtonAdd/ButtonAdd';
-//import Counter from '../../basic/Counter/Counter';
+import ModalComp from '../ModalComp/ModalComp';
 import { IoIosArrowRoundBack } from 'react-icons/io'
 
 
 
 
 
-
-
-export default function BlocksContainer({type, apiPreview, path, object}) {
+export default function BlocksContainer({type, apiPreview, path, object, handleTrashClick}) {
 
     const [show, toggleModal] = useReducer( state => !state, false);    
-
-    const { data /* loading, error */ } = useFetch(path, "GET")    
+    const [blockType] = useState(type === 'category')
+    const { data } = useFetch(path, "GET")    
 
 
     const items = data ? data[object].map( ( cat,i ) => {
@@ -38,25 +28,22 @@ export default function BlocksContainer({type, apiPreview, path, object}) {
         let previewPath = existsPreview ? apiPreview + cat.image.fullpath : apiPreview + cat.fullpath;
         let galleryPath = path + "/" + cat.path;
 
-        console.log(galleryPath)
-
-        return (
-                     
+        return (                     
                 <Col xs={12} sm={6} md={4} lg={3} key={i} >                    
-                    <Link to={cat.path} className='position-relative'>
-                        { /* type === "category" && <Counter className={styles.blockCounter}/> */ }
-                        { type === "category" ?
-                            <Item label={cat.name} type={type} imgPath={previewPath} galleryPath={galleryPath}/>
-                            : <ItemImg label={cat.name} type={type} imgPath={previewPath}/>
-                        }
-                    </Link>
-                </Col>
-                         
+                    { blockType ? 
+                        <Link to={cat.path} className='position-relative'>
+                            <Item label={cat.name} type={type} imgPath={previewPath} galleryPath={galleryPath} handleTrashClick={handleTrashClick}/>
+                        </Link> 
+                            :                         
+                        <Item label={cat.name} type={type} imgPath={previewPath} galleryPath={galleryPath} handleTrashClick={handleTrashClick}/>
+                    }
+                </Col>                         
         )
     }) : null
 
+
     const subtitle = () => {
-        if ( type === 'gallery' && data ) {
+        if ( !blockType && data ) {
             return (
                 <Link to="/">
                         <h5 className={`d-flex align-items-center ${styles.categoryName}`}>
@@ -86,19 +73,8 @@ export default function BlocksContainer({type, apiPreview, path, object}) {
                     
             </Row>
             
-
-            <Modal show={show} onHide={ () => toggleModal() } className={styles.bootstrapModal} centered>
-                <div className='p-4'>
-                        <Modal.Header className='p-0 border-0' closeButton>
-                            <Modal.Title>Pridať {type}</Modal.Title>
-                        </Modal.Header>
-                        <OverlayMainCategory />
-                        <OverlayMainPhoto />
-                        <ButtonAdd label="Pridať"/>
-
-                </div>
-            </Modal>
-               
+            <ModalComp toggleModal={toggleModal} show={show} type={type}/>
+            
         </>
         
     )

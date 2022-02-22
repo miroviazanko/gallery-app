@@ -1,0 +1,17 @@
+@import '../../../Sass/custom.scss';
+
+
+.trash {
+    color: $color-warning;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    .trashIcon {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 8%;
+        height: auto;
+    }
+}
