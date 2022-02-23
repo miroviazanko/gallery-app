@@ -1,4 +1,4 @@
-import { useReducer , useState} from 'react';
+import { useReducer , useState, useEffect} from 'react';
 import { useFetch } from '../../basic/Fetch/FetchHook';
 import {  Link } from "react-router-dom";
 
@@ -10,19 +10,44 @@ import Item from '../../basic/Item/Item';
 import ItemAdd from '../../basic/ItemAdd/ItemAdd';
 import ModalComp from '../ModalComp/ModalComp';
 import { IoIosArrowRoundBack } from 'react-icons/io'
+import { getUrlLastPart } from '../../../Helpers/getUrlLastPart';
 
 
 
 
 
-export default function BlocksContainer({type, apiPreview, path, object, handleTrashClick}) {
+export default function BlocksContainer({type, apiPreview, path, object}) {
 
     const [show, toggleModal] = useReducer( state => !state, false);    
     const [blockType] = useState(type === 'category')
+    const [ datas, setDatas ] = useState();
+    
     const { data } = useFetch(path, "GET")    
 
+    useEffect( () => {
+		setDatas(data)
+	}, [data]);
 
-    const items = data ? data[object].map( ( cat,i ) => {
+    const deleteGallery = async(path) => await fetch( path, {
+        "method": "DELETE"
+    }).then( () => {
+        const lastPart = getUrlLastPart(path);
+        setDatas( datas => {
+			return {
+				galleries: datas.galleries.filter( item => item.path !== lastPart  )
+			}
+		} )
+        }
+    )
+
+	const handleTrashClick = (e, path) => {
+        e.preventDefault();
+        e.stopPropagation();    
+        deleteGallery(path); 		
+    }
+
+
+    const items = datas ? datas[object].map( ( cat,i ) => {
 
         let existsPreview = "image" in cat;
         let previewPath = existsPreview ? apiPreview + cat.image.fullpath : apiPreview + cat.fullpath;
@@ -59,6 +84,8 @@ export default function BlocksContainer({type, apiPreview, path, object, handleT
     }
 
 
+
+    
     return (
         <>
             <div className='my-4'>{subtitle()}</div>            

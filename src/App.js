@@ -17,27 +17,14 @@ export default function App() {
 	const [ apiGalleryUrl] = useState(`${apiUrl}/gallery`);
 	const [ apiPreview ] = useState(`${apiUrl}/images/400x0/`)
 	const [ datas, setDatas ] = useState();
-	const [ forceRender, setForceRender ] = useReducer( state => !state, false )
+	//const [ forceRender, setForceRender ] = useReducer( state => !state, false )
 
 	const { loading, data, error } = useFetch(`${apiGalleryUrl}`, "GET")
 		
 	useEffect( () => {
 		setDatas(data)
-	}, [data, setForceRender]);
+	}, [data]);
 
-	const deleteGallery = async(path) => await fetch( path, {
-        "method": "DELETE"
-    }).then()
-
-	const handleTrashClick = (e, path) => {
-        e.preventDefault();
-        e.stopPropagation();    
-       /*  console.log(e, path) */
-        deleteGallery(path) 
-		setForceRender();
-    }
-
-	
 
 	//const { loading, data, error } = useFetch("http://api.programator.sk/gallery/sea%20animals", "DELETE")
 
@@ -82,8 +69,7 @@ export default function App() {
 											type="category"
 											path={`${apiGalleryUrl}`}
 											object="galleries"
-											key={.5}
-											handleTrashClick={handleTrashClick}/>
+											key={.5}/>
 									} >
 								
 							</Route>

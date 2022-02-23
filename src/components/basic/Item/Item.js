@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import styles from './Item.module.scss';
 import { checkImage } from '../../../Helpers/checkImg';
+import { getUrlLastPart } from '../../../Helpers/getUrlLastPart';
 
 import img from '../../../assets/img/placeholder.png';
 import Counter from '../Counter/Counter';
@@ -11,7 +12,7 @@ import Trash from '../Trash/Trash';
 
 export default function Item({label, type, imgPath, galleryPath, handleTrashClick}) {
 
-    const [ imgUrl, setImgUrl ] = useState(imgPath)
+    //const [ imgUrl, setImgUrl ] = useState(imgPath)
     const [ count, setCount ] = useState();
     const [ itemType ] = useState(type === "category");
 
@@ -26,14 +27,11 @@ export default function Item({label, type, imgPath, galleryPath, handleTrashClic
             gallery(galleryPath)
         }
 
-        checkImage(imgPath, setImgUrl);
-
-      return () => {
-        
-      }
+        //checkImage(imgPath, setImgUrl);
     }, [galleryPath])
 
-    const imgSrc = imgUrl ? imgUrl : img;
+    const lastPart = getUrlLastPart(imgPath);
+    const imgSrc = lastPart !== 'undefined' ? imgPath : img;
 
     return (
         
