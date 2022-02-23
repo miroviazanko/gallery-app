@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route /* , Navigate */ } from "react-router-dom";
 
 import './App.scss';
@@ -11,13 +11,14 @@ import Loading from './components/basic/Loading/Loading';
 
 
 
+
 export default function App() {
 
 	const [ apiUrl] = useState('http://api.programator.sk');
 	const [ apiGalleryUrl] = useState(`${apiUrl}/gallery`);
 	const [ apiPreview ] = useState(`${apiUrl}/images/400x0/`)
+	const [ lightBoxImg ] = useState(`${apiUrl}/images/1200x0/`)
 	const [ datas, setDatas ] = useState();
-	//const [ forceRender, setForceRender ] = useReducer( state => !state, false )
 
 	const { loading, data, error } = useFetch(`${apiGalleryUrl}`, "GET")
 		
@@ -26,24 +27,18 @@ export default function App() {
 	}, [data]);
 
 
-	//const { loading, data, error } = useFetch("http://api.programator.sk/gallery/sea%20animals", "DELETE")
-
-	const routes = datas && datas.galleries.map( ( (gallery, i) => {
-		
+	const routes = datas && datas.galleries.map( ( (gallery, i) => {		
 		const path = gallery.path;
-
 		return (
 			<Route path={path}
 				   key={i} 
-				   element={
-							<BlocksContainer 
+				   element={ <BlocksContainer 
 								apiPreview={apiPreview} 
 								type="gallery"
 								path={apiGalleryUrl + '/' + path}
 								object="images"
-								key={i}/>
-						} >
-								
+								key={i}
+								lightBoxImg={lightBoxImg}/> }>								
 			</Route>
 		)
 	} ))
@@ -56,21 +51,18 @@ export default function App() {
 				<Container fluid="md" className='text-start py-5'>				
 					<h1 className='pt-5 pb-3'>Fotogaléria</h1>
 					
-
 					{ loading && !error ? <Loading /> : null }
 
 					{  datas && 
 						
 						<Routes>
 							<Route path="/" 
-									element={
-										<BlocksContainer 
-											apiPreview={apiPreview} 
-											type="category"
-											path={`${apiGalleryUrl}`}
-											object="galleries"
-											key={.5}/>
-									} >
+									element={ <BlocksContainer 
+												apiPreview={apiPreview} 
+												type="category"
+												path={`${apiGalleryUrl}`}
+												object="galleries"
+												key={.5} /> } >
 								
 							</Route>
 							
@@ -83,8 +75,7 @@ export default function App() {
 					}
 
 					{ /* error && <Navigate replace to="/error" element={<NoMatch/>} /> */ }
-					
-					
+										
 				</Container>
 
 		</div>
