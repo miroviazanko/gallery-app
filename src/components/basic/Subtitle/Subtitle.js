@@ -12,14 +12,18 @@ export default function Subtitle({ type, data }) {
         if ( !type && data ) {
             return (
                 <Link to="/">
-                        <h5 className={`d-flex align-items-center ${styles.categoryName}`}>
-                            <IoIosArrowRoundBack className='me-3'/>{data.gallery.name}
-                        </h5>
+                        <div className='my-4'>
+                            <h5 className={`d-flex align-items-center ${styles.categoryName}`}>
+                                <IoIosArrowRoundBack className='me-3'/>{data.gallery.name}
+                            </h5>
+                        </div>
                 </Link>
             )
         } else {
             return (
-                <h5>Kategórie</h5>
+                <div className='my-4'>
+                    <h5>Kategórie</h5>
+                </div>
             )
         }
     }

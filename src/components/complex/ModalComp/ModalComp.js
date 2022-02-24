@@ -10,12 +10,12 @@ import OverlayMainPhoto from '../../basic/OverlayMainPhoto/OverlayMainPhoto';
 
 
 
-export default function ModalComp({ show ,toggleModal, type }) {
+export default function ModalComp({ show ,toggleModal, type, inputValueCat }) {
 
     const [ modalType ] = useState(type === 'category')
 
     const inputValue = (value) => {
-        console.log(value);
+        inputValueCat(value)
     }
 
     return (

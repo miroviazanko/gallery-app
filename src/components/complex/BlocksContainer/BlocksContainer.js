@@ -36,6 +36,9 @@ export default function BlocksContainer({type, apiPreview, path, object, lightBo
 		setDatas(data)
 	}, [data]);
 
+    console.log(type, path, object, apiPreview)
+
+    // Fetch 
     const deleteGallery = async(path) => await fetch( path, {
         "method": "DELETE"
     }).then( () => {
@@ -48,13 +51,27 @@ export default function BlocksContainer({type, apiPreview, path, object, lightBo
         }
     )
 
+    const addCategory = async(path, value) => await fetch( path, {
+        "method": "POST",
+        "body": JSON.stringify({name: value}),
+        "headers": {
+            'Content-Type': 'application/json'
+        }
+    }).then( res => res.json())
+        .then( resp => setDatas( datas => {
+            return {
+                galleries: [ ...datas.galleries, resp] 
+            }
+        } ))
+
+
 	const handleTrashClick = (e, path) => {
         e.preventDefault();
         e.stopPropagation();    
         deleteGallery(path); 		
     }
 
-    console.log(type)
+    
 
     const items = datas ? datas[object].map( ( cat,i ) => {
 
@@ -82,15 +99,35 @@ export default function BlocksContainer({type, apiPreview, path, object, lightBo
 
     const imagesArr = datas && !blockType ? datas.images.map( img => [lightBoxImg + getUrlLastPart(path) + '/' + img.path] ) : null;
 
+    const inputValueCat = (value) => { 
+        addCategory(path, value);
+        toggleModal();
+    }
+
+
+    /* const request = new Request(`${api}gallery`, {
+        method: 'POST',
+        body: JSON.stringify(newCat),
+        headers: {
+          'Content-Type': 'application/json'
+      }
+    })
+
+      fetch(request)
+        .then( res => res.json())
+        .then( resp => this.setState( state => {
+                        return{
+                            icons: [...state.icons, {...resp, countPhotos:[]}]
+                        }
+        })) */
+
 
 
 
     return (
-        <>
-            <div className='my-4'>
-                <Subtitle type={blockType} data={data} />    
-            </div>            
-
+        <>           
+            <Subtitle type={blockType} data={data} />    
+                        
             <Row className='g-4 g-lg-5'>
                 { items }                
                 
@@ -99,7 +136,7 @@ export default function BlocksContainer({type, apiPreview, path, object, lightBo
                 </Col>                    
             </Row>
             
-            <ModalComp toggleModal={toggleModal} show={show} type={type}/>
+            <ModalComp toggleModal={toggleModal} show={show} type={type} inputValueCat={inputValueCat}/>
 
             {isOpen && (
                 <Lightbox

@@ -16,7 +16,7 @@ export default function App() {
 
 	const [ apiUrl] = useState('http://api.programator.sk');
 	const [ apiGalleryUrl] = useState(`${apiUrl}/gallery`);
-	const [ apiPreview ] = useState(`${apiUrl}/images/400x0/`)
+	const [ apiPreview ] = useState(`${apiUrl}/images/200x0/`)
 	const [ lightBoxImg ] = useState(`${apiUrl}/images/1200x0/`)
 	const [ datas, setDatas ] = useState();
 
@@ -29,6 +29,9 @@ export default function App() {
 
 	const routes = datas && datas.galleries.map( ( (gallery, i) => {		
 		const path = gallery.path;
+
+		console.log(path)
+
 		return (
 			<Route path={path}
 				   key={i} 

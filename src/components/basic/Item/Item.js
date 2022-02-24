@@ -29,7 +29,11 @@ export default function Item({label, type, imgPath, galleryPath, handleTrashClic
         }
 
         //checkImage(imgPath, setImgUrl);
+
     }, [galleryPath])
+
+
+    //const imgSrc = imgUrl ? imgUrl :img; 
 
     const lastPart = getUrlLastPart(imgPath);
     const imgSrc = lastPart !== 'undefined' ? imgPath : img;
@@ -38,7 +42,9 @@ export default function Item({label, type, imgPath, galleryPath, handleTrashClic
         
         <div className={`${styles.itemWrapper} position-relative`}>
             
-            { itemType && <Counter count={count} /> }
+            { itemType && 
+                    <Counter count={count} /> }
+
             <img src={imgSrc} alt="pic" />
     
             { itemType &&
@@ -46,7 +52,8 @@ export default function Item({label, type, imgPath, galleryPath, handleTrashClic
                     <h6>{label}</h6>
                 </div>
             }
-            { itemType && <Trash galleryPath={galleryPath} handleTrashClick={handleTrashClick}/>}
+            { itemType && 
+                    <Trash galleryPath={galleryPath} handleTrashClick={handleTrashClick}/>}
 
         </div>
         
