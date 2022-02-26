@@ -1,5 +1,5 @@
 import { useReducer ,useState, useEffect } from 'react';
-import { useFetch } from '../../basic/Fetch/FetchHook';
+//import { useFetch } from '../../basic/Fetch/FetchHook';
 import { Link } from "react-router-dom";
 
 //import styles from './BlocksContainer.module.scss';
@@ -19,7 +19,7 @@ import 'react-image-lightbox/style.css'; // This only needs to be imported once 
 
 
 
-export default function BlocksContainer({type, apiPreview, path, object, lightBoxImg}) {
+export default function BlocksContainer({type, apiPreview, path, object, lightBoxImg, inputValueCategory, data, deleteGallery}) {
 
     const [ show, toggleModal ] = useReducer( state => !state, false);    
     const [ blockType ] = useState(type === 'category')
@@ -30,39 +30,27 @@ export default function BlocksContainer({type, apiPreview, path, object, lightBo
     const [isOpen, setIsOpen] = useState(false);
    
     // Get Api gallery data
-    const { data } = useFetch(path, "GET")    
+    //const { data } = useFetch(path, "GET")    
 
+    
     useEffect( () => {
-		setDatas(data)
+		if ( !data ) {
+            fetch(path, {
+                "method": "GET",
+                "headers": {
+                    "Content-Type":"application/json"
+                }
+                }).then(response => response.json())
+                .then( data => setDatas(data) )
+                /* .then( () => setLoading(false) )
+                .catch( setError ); */
+                    //setDatas(data)
+            
+        } else {
+            setDatas(data)
+        }
+
 	}, [data]);
-
-    console.log(type, path, object, apiPreview)
-
-    // Fetch 
-    const deleteGallery = async(path) => await fetch( path, {
-        "method": "DELETE"
-    }).then( () => {
-        const lastPart = getUrlLastPart(path);
-        setDatas( datas => {
-			return {
-				galleries: datas.galleries.filter( item => item.path !== lastPart  )
-			}
-		} )
-        }
-    )
-
-    const addCategory = async(path, value) => await fetch( path, {
-        "method": "POST",
-        "body": JSON.stringify({name: value}),
-        "headers": {
-            'Content-Type': 'application/json'
-        }
-    }).then( res => res.json())
-        .then( resp => setDatas( datas => {
-            return {
-                galleries: [ ...datas.galleries, resp] 
-            }
-        } ))
 
 
 	const handleTrashClick = (e, path) => {
@@ -71,7 +59,11 @@ export default function BlocksContainer({type, apiPreview, path, object, lightBo
         deleteGallery(path); 		
     }
 
-    
+    const inputValueCat = (value) => { 
+        //addCategory(path, value);
+        toggleModal();
+        inputValueCategory( value, path )
+    }
 
     const items = datas ? datas[object].map( ( cat,i ) => {
 
@@ -99,34 +91,13 @@ export default function BlocksContainer({type, apiPreview, path, object, lightBo
 
     const imagesArr = datas && !blockType ? datas.images.map( img => [lightBoxImg + getUrlLastPart(path) + '/' + img.path] ) : null;
 
-    const inputValueCat = (value) => { 
-        addCategory(path, value);
-        toggleModal();
-    }
-
-
-    /* const request = new Request(`${api}gallery`, {
-        method: 'POST',
-        body: JSON.stringify(newCat),
-        headers: {
-          'Content-Type': 'application/json'
-      }
-    })
-
-      fetch(request)
-        .then( res => res.json())
-        .then( resp => this.setState( state => {
-                        return{
-                            icons: [...state.icons, {...resp, countPhotos:[]}]
-                        }
-        })) */
-
+    
 
 
 
     return (
         <>           
-            <Subtitle type={blockType} data={data} />    
+            <Subtitle type={blockType} data={datas} />    
                         
             <Row className='g-4 g-lg-5'>
                 { items }                

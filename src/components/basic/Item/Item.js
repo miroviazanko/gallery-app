@@ -7,7 +7,7 @@ import { getUrlLastPart } from '../../../Helpers/getUrlLastPart';
 import img from '../../../assets/img/placeholder.png';
 import Counter from '../Counter/Counter';
 import Trash from '../Trash/Trash';
-
+import Loading from '../Loading/Loading';
 
 
 
@@ -16,7 +16,7 @@ export default function Item({label, type, imgPath, galleryPath, handleTrashClic
     //const [ imgUrl, setImgUrl ] = useState(imgPath)
     const [ count, setCount ] = useState();
     const [ itemType ] = useState(type === "category");
-
+    const [ loading, setLoading ] = useState(true)
 
     useEffect(() => {
      
@@ -24,6 +24,7 @@ export default function Item({label, type, imgPath, galleryPath, handleTrashClic
             const gallery = async(path) => await fetch( path )
                     .then( response => response.json() )
                     .then( data => setCount( data.images.length ) )
+                    .then( () => setLoading(false) )
             
             gallery(galleryPath)
         }
@@ -38,10 +39,15 @@ export default function Item({label, type, imgPath, galleryPath, handleTrashClic
     const lastPart = getUrlLastPart(imgPath);
     const imgSrc = lastPart !== 'undefined' ? imgPath : img;
 
+
     return (
         
         <div className={`${styles.itemWrapper} position-relative`}>
             
+            { loading && <div className={styles.loadingIcon}>
+                    <Loading />
+                </div> }
+
             { itemType && 
                     <Counter count={count} /> }
 
