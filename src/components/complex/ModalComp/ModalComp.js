@@ -10,12 +10,16 @@ import OverlayMainPhoto from '../../basic/OverlayMainPhoto/OverlayMainPhoto';
 
 
 
-export default function ModalComp({ show ,toggleModal, type, inputValueCat }) {
+export default function ModalComp({ show ,toggleModal, type, inputValueCat, uploadedImages }) {
 
     const [ modalType ] = useState(type === 'category')
 
     const inputValue = (value) => {
         inputValueCat(value)
+    }
+
+    const uploadedFiles = (e) => {
+        uploadedImages(e)
     }
 
     return (
@@ -25,7 +29,8 @@ export default function ModalComp({ show ,toggleModal, type, inputValueCat }) {
                     <Modal.Header className='p-0 border-0' closeButton>
                         <Modal.Title>Pridať {type}</Modal.Title>
                     </Modal.Header>
-                    { modalType ? <OverlayMainCategory inputValue={inputValue}/> : <OverlayMainPhoto /> }
+                    { modalType ? <OverlayMainCategory inputValue={inputValue}/> : 
+                                  <OverlayMainPhoto uploadedFiles={uploadedFiles}/> }
                     
 
             </div>

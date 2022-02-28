@@ -4,8 +4,11 @@ import { BsCardImage } from 'react-icons/bs';
 import ButtonFile from '../ButtonFile/ButtonFile';
 
 
-export default function OverlayMainPhoto() {
+export default function OverlayMainPhoto({uploadedFiles}) {
 
+    const uploadedFilesFormData = (e) => {
+        uploadedFiles(e)
+    }
 
     return (
         <div className={`${styles.overlayMainPhoto} my-4 p-4 text-center`}>
@@ -15,8 +18,8 @@ export default function OverlayMainPhoto() {
             </div>
             
             <h6 className='text-color-shadow mb-4'>alebo</h6>
-
-            <ButtonFile />
+            
+            <ButtonFile uploadedFilesFormData={uploadedFilesFormData}/>
 
         </div>
     )

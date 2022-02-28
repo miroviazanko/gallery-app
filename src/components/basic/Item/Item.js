@@ -58,8 +58,7 @@ export default function Item({label, type, imgPath, galleryPath, handleTrashClic
                     <h6>{label}</h6>
                 </div>
             }
-            { itemType && 
-                    <Trash galleryPath={galleryPath} handleTrashClick={handleTrashClick}/>}
+            <Trash galleryPath={galleryPath} handleTrashClick={handleTrashClick}/>
 
         </div>
         

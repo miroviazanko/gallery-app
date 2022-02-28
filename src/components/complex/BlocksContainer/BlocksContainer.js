@@ -28,9 +28,6 @@ export default function BlocksContainer({type, apiPreview, path, object, lightBo
     // Lightbox 
     const [photoIndex, setPhotoIndex] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
-   
-    // Get Api gallery data
-    //const { data } = useFetch(path, "GET")    
 
     
     useEffect( () => {
@@ -52,18 +49,50 @@ export default function BlocksContainer({type, apiPreview, path, object, lightBo
 
 	}, [data]);
 
+    const deleteImage = async(path) => await fetch( path, {
+        "method": "DELETE"
+    }).then( () => {
+        const lastPart = getUrlLastPart(path);
+        setDatas( datas => {
+			return {
+                gallery: {...datas.gallery},
+				images: datas.images.filter( item => item.path !== lastPart  )
+			}
+		} )
+        }
+    )
+
+    const addImage = async(path, formData) => await fetch( path, {
+		method: "POST",
+		body: formData
+	}).then( response => response.json() )
+      .then( files => setDatas( datas => {
+            let galleryName = getUrlLastPart(path)
+            return {
+                gallery: { name: galleryName,
+                           path: galleryName },
+                images: [ ...datas.images, ...files.uploaded ]
+            }
+        }
+    ))
 
 	const handleTrashClick = (e, path) => {
         e.preventDefault();
         e.stopPropagation();    
-        deleteGallery(path); 		
+        blockType ? deleteGallery(path) : deleteImage(path)         		
     }
 
     const inputValueCat = (value) => { 
-        //addCategory(path, value);
         toggleModal();
         inputValueCategory( value, path )
     }
+
+    const uploadedImages = (formData) => {
+        toggleModal();
+        addImage( path, formData )        
+    }
+
+
 
     const items = datas ? datas[object].map( ( cat,i ) => {
 
@@ -93,8 +122,6 @@ export default function BlocksContainer({type, apiPreview, path, object, lightBo
 
     
 
-
-
     return (
         <>           
             <Subtitle type={blockType} data={datas} />    
@@ -107,7 +134,10 @@ export default function BlocksContainer({type, apiPreview, path, object, lightBo
                 </Col>                    
             </Row>
             
-            <ModalComp toggleModal={toggleModal} show={show} type={type} inputValueCat={inputValueCat}/>
+            <ModalComp toggleModal={toggleModal} 
+                       show={show} type={type} 
+                       inputValueCat={inputValueCat}
+                       uploadedImages={uploadedImages}/>
 
             {isOpen && (
                 <Lightbox

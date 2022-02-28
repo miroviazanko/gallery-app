@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route /* , Navigate */ } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import './App.scss';
 
@@ -8,7 +8,7 @@ import Container from 'react-bootstrap/Container';
 import NoMatch from './components/basic/NoMatch/NoMatch';
 import { getUrlLastPart } from './Helpers/getUrlLastPart';
 
-
+//import SortItems from './components/basic/SortItems/SortItems';
 
 export default function App() {
 
@@ -17,8 +17,6 @@ export default function App() {
 	const [ apiPreview ] = useState(`${apiUrl}/images/200x0/`)
 	const [ lightBoxImg ] = useState(`${apiUrl}/images/1200x0/`)
 	const [ datas, setDatas ] = useState();
-
-	//const { loading, data, error } = useFetch(`${apiGalleryUrl}`, "GET")
 	
 	useEffect( () => {
 		if ( !datas ) {
@@ -89,6 +87,8 @@ export default function App() {
 
 	return (
 		<div className="App">
+
+				{/* <SortItems /> */}
 
 				<Container fluid="md" className='text-start py-5'>				
 					<h1 className='pt-5 pb-3'>Fotogaléria</h1>

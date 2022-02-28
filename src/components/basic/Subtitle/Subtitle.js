@@ -8,8 +8,6 @@ import { IoIosArrowRoundBack } from 'react-icons/io'
 
 export default function Subtitle({ type, data }) {
 
-    console.log(type, data)
-
     const subtitle = () => {
         if ( !type && data ) {
             return (
