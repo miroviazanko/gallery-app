@@ -1,41 +1,40 @@
-import { useState } from 'react';
+import styles from './SortItems.module.scss';
+import { FaLongArrowAltDown } from 'react-icons/fa'
+import { FaLongArrowAltUp } from 'react-icons/fa'
 
-//import styles from './SortItems.module.scss';
+import Accordion from 'react-bootstrap/Accordion';
+import AccordionHeader from 'react-bootstrap/AccordionHeader';
+import AccordionBody from 'react-bootstrap/AccordionBody';
 
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import ToggleButton from 'react-bootstrap/ToggleButton';
 
-export default function SortItems() {
+export default function SortItems({sortByValue}) {
 
-    //const [checked, setChecked] = useState(false);
-    const [radioValue, setRadioValue] = useState('1');
+    const radios = [`Názov:A-Z`, 'Názov:Z-A', 'Najviac fotiek', 'Najmenej fotiek']
 
-    const radios = [
-        { name: 'Active', value: '1' },
-        { name: 'Radio', value: '2' },
-        { name: 'Radio', value: '3' },
-    ];
+    const radiosElement = radios.map( (radio, i) => {
+        return (
+           <div key={i}>
+                <label>
+                    <input type="radio" value={radio} name="sorting"/> 
+                    {radio}
+                    { (i+1) % 2 === 0 ? <FaLongArrowAltUp /> : <FaLongArrowAltDown /> }          
+                </label><br/>
+           </div>
+        )
+    })
+
+    const handleSubmitSort = (e) => {
+        e.preventDefault();
+        let radioValue = e.target.value;
+        //console.log(radioValue)
+        sortByValue(radioValue)
+    }
 
     return (
-
-        
-        <ButtonGroup className="mb-2">
-            {radios.map((radio, idx) => (
-            <ToggleButton
-                key={idx}
-                id={`radio-${idx}`}
-                type="radio"
-                variant="secondary"
-                name="radio"
-                value={radio.value}
-                checked={radioValue === radio.value}
-                onChange={(e) => setRadioValue(e.currentTarget.value)}
-            >
-                {radio.name}
-            </ToggleButton>
-            ))}
-        </ButtonGroup>
-
+        <Accordion className={`${styles.sortItems} my-4`} onChange={(e) => handleSubmitSort(e)}>
+            <AccordionHeader bg='color-shadow'>Usporiadať:</AccordionHeader>
+            <AccordionBody bg='color-shadow'>{radiosElement}</AccordionBody>
+        </Accordion>
     )
 
 }

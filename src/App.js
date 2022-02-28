@@ -8,7 +8,7 @@ import Container from 'react-bootstrap/Container';
 import NoMatch from './components/basic/NoMatch/NoMatch';
 import { getUrlLastPart } from './Helpers/getUrlLastPart';
 
-//import SortItems from './components/basic/SortItems/SortItems';
+
 
 export default function App() {
 
@@ -88,7 +88,7 @@ export default function App() {
 	return (
 		<div className="App">
 
-				{/* <SortItems /> */}
+				
 
 				<Container fluid="md" className='text-start py-5'>				
 					<h1 className='pt-5 pb-3'>Fotogaléria</h1>

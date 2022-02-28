@@ -11,7 +11,7 @@ import Loading from '../Loading/Loading';
 
 
 
-export default function Item({label, type, imgPath, galleryPath, handleTrashClick}) {
+export default function Item({label, type, imgPath, galleryPath, handleTrashClick, galleryCount}) {
 
     //const [ imgUrl, setImgUrl ] = useState(imgPath)
     const [ count, setCount ] = useState();
@@ -27,12 +27,20 @@ export default function Item({label, type, imgPath, galleryPath, handleTrashClic
                     .then( () => setLoading(false) )
             
             gallery(galleryPath)
+            
         }
-
         //checkImage(imgPath, setImgUrl);
 
     }, [galleryPath])
 
+    useEffect( () => {
+        if ( itemType ) {
+            galleryCount(count, label)
+        }
+    }, [count])
+
+
+    console.log(count)
 
     //const imgSrc = imgUrl ? imgUrl :img; 
 
