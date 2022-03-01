@@ -1,74 +1,84 @@
-import { useState, useEffect/* , useReducer */ } from 'react';
-import { Routes, Route /* , Navigate */ } from "react-router-dom";
-
+import { useState, useEffect } from 'react';
+import { Routes, Route } from "react-router-dom";
 
 import './App.scss';
 
 import BlocksContainer from './components/complex/BlocksContainer/BlocksContainer';
-import GalleryContainer from './components/complex/GalleryContainer/GalleryContainer';
 import Container from 'react-bootstrap/Container';
 import NoMatch from './components/basic/NoMatch/NoMatch';
+import { getUrlLastPart } from './Helpers/getUrlLastPart';
 
-
-
-import './App.scss';
-//import Loading from './components/basic/Loading/Loading';
 
 
 export default function App() {
 
 	const [ apiUrl] = useState('http://api.programator.sk');
 	const [ apiGalleryUrl] = useState(`${apiUrl}/gallery`);
-	const [ apiImage ] = useState(`${apiUrl}/images/400x0`)
-
-	const [ categories, setCategories ] = useState([])
-
+	const [ apiPreview ] = useState(`${apiUrl}/images/200x0/`)
+	const [ lightBoxImg ] = useState(`${apiUrl}/images/1200x0/`)
+	const [ datas, setDatas ] = useState();
 	
 	useEffect( () => {
-
-		const reqAccountAndTransactions = async (uri, method) => {
-		
-			const fetchCategories = await fetch(uri, {
-					"method": method,
-					"headers": {
-						"Content-Type":"application/json"
-					},
-					"mode": 'cors',
-					"cache": 'default'
+		if ( !datas ) {
+		fetch(apiGalleryUrl, {
+			"method": "GET",
+			"headers": {
+				"Content-Type":"application/json"
+			}
 			}).then(response => response.json())
-			.then( (data) => setCategories( data ) )
+			.then( data => setDatas(data) )
 			//.catch( setError );
-
-
 		}
-		reqAccountAndTransactions(apiGalleryUrl, "GET");
-
-	}, [ apiGalleryUrl ] );
+	}, [apiGalleryUrl]);
 	
 
+	const addCategory = async(path, value) => await fetch( path, {
+        "method": "POST",
+        "body": JSON.stringify({name: value}),
+        "headers": {
+            'Content-Type': 'application/json'
+        }
+    }).then( res => res.json())
+        .then( resp => setDatas( datas => {
+            return {
+                galleries: [ ...datas.galleries, resp] 
+            }
+        } ))
 
 
-	//const { loading, data, error } = useFetch("http://api.programator.sk/gallery/sea%20animals", "DELETE")
+	// Use fetch() to delete Category (Gallery) 
+    const deleteGallery = async(path) => await fetch( path, {
+        "method": "DELETE"
+    }).then( () => {
+        const lastPart = getUrlLastPart(path);
+        setDatas( datas => {
+			return {
+				galleries: datas.galleries.filter( item => item.path !== lastPart  )
+			}
+		} )
+        }
+    )
 
-	const routes = categories.length && categories.galleries.map( ( (gallery, i) => {
-		
+	const deleteGalleryCat = (path) => {
+		deleteGallery(path);
+	}
+
+	const inputValueCategory = ( value, path ) => {
+		addCategory(path, value);
+	}
+
+	const routes = datas && datas.galleries.map( ( (gallery, i) => {		
 		const path = gallery.path;
-		const name = gallery.name;
-
-		console.log(path)
-
 		return (
 			<Route path={path}
 				   key={i} 
-				   element={
-							<GalleryContainer 
+				   element={ <BlocksContainer 
+								apiPreview={apiPreview} 
 								type="gallery"
-								apiUrl={apiUrl}
-								preview={apiImage}
-								path={path}
-								name={name}
-								key={i}/>
-						} >								
+								path={apiGalleryUrl + '/' + path}
+								object="images"
+								key={i}
+								lightBoxImg={lightBoxImg}/> }>								
 			</Route>
 		)
 	} ))
@@ -79,36 +89,32 @@ export default function App() {
 		<div className="App">
 				<Container fluid="md" className='text-start py-5'>				
 					<h1 className='pt-5 pb-3'>Fotogaléria</h1>
-					
 
-					{ /* loading && !error ? <Loading /> : null */ }
+					{  datas && 
 						
 						<Routes>
 							<Route path="/" 
-									element={
-										<BlocksContainer 
-											type="category"
-											object="galleries"
-											data={categories}
-											apiUrl={apiGalleryUrl}
-											preview={apiImage}
-											key={.5}/>
-									} >
+									element={ <BlocksContainer 
+												apiPreview={apiPreview} 
+												type="category"
+												path={`${apiGalleryUrl}`}
+												object="galleries"
+												key={.5} 
+												inputValueCategory={inputValueCategory}
+												deleteGallery={deleteGalleryCat}
+												data={datas}/> } >
 								
 							</Route>
 							
 							{ routes }
 							
 							<Route path="*" element={<NoMatch />}></Route>
-							{ /*<Route path="/error" element={<NoMatch />}></Route> */}
-						</Routes>
+							
+						</Routes> 
 						
-					
-
-					{ /* error && <Navigate replace to="/error" element={<NoMatch/>} /> */ }
-					
-					
+					}										
 				</Container>
 		</div>
 	);
 }
+
