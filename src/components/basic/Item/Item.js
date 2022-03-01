@@ -12,12 +12,10 @@ import Loading from '../Loading/Loading';
 
 
 
-export default function Item({label, type, imgPath, galleryPath, handleTrashClick, galleryCount}) {
+export default function Item({label, type, imgPath, galleryPath}) {
 
-    //const [ imgUrl, setImgUrl ] = useState(imgPath)
-    const [ count, setCount ] = useState();
-    const [ itemType ] = useState(type === "category");
-    const [ loading, setLoading ] = useState(true)
+    const [ imgUrl, setImgUrl ] = useState(imgPath) 
+    const [ gallery, setGallery] = useState([]);
 
     useEffect(() => {
      
@@ -47,16 +45,26 @@ export default function Item({label, type, imgPath, galleryPath, handleTrashClic
 
 
 
+
+    useEffect( () => {
+
+        const gallery = async() => {
+            await fetch(galleryPath)
+            .then( resp => resp.json() )
+            .then( data => setGallery(data) )
+        }
+        gallery();
+      
+
+	}, [ galleryPath ] );
+
+
+
     return (
         
         <div className={`${styles.itemWrapper} position-relative`}>
-            
-            { loading && <div className={styles.loadingIcon}>
-                    <Loading />
-                </div> }
-
-            { itemType && 
-                    <Counter count={count} /> }
+            <Counter count={gallery.images && gallery.images.length}/>
+            <img src={imgSrc} alt="pic" />
 
             <img src={imgSrc} alt="pic" />
     

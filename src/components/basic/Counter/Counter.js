@@ -7,7 +7,7 @@ export default function Counter({count}) {
     let text;
 
     switch (true) {
-        case ( count > 0 && count < 2 ) :
+        case  1 :
             text = 'fotka'
             break;
         case ( count > 1 && count < 5 ):
