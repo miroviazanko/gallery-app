@@ -1,61 +1,71 @@
 import { useState, useEffect } from 'react';
 
 import styles from './Item.module.scss';
+//import { checkImage } from '../../../Helpers/checkImg';
+import { getUrlLastPart } from '../../../Helpers/getUrlLastPart';
 
 
 import Counter from '../Counter/Counter';
 import img from '../../../assets/img/placeholder.png';
+import Trash from '../Trash/Trash';
+import Loading from '../Loading/Loading';
 
 
 
-export default function Item({label, type, imgPath, galleryPath}) {
+export default function Item({label, type, imgPath, galleryPath, handleTrashClick, galleryCount}) {
 
-    const [ imgUrl, setImgUrl ] = useState(imgPath) 
-    const [ gallery, setGallery] = useState([]);
+    //const [ imgUrl, setImgUrl ] = useState(imgPath)
+    const [ count, setCount ] = useState();
+    const [ itemType ] = useState(type === "category");
+    const [ loading, setLoading ] = useState(true)
 
-    function testImage(URL) {
-        var tester=new Image();
-        //tester.onload=imageFound;
-        tester.onerror=imageNotFound;
-        tester.src=URL;
-    }
-    
-    function imageNotFound(imgPath) {
-        setImgUrl('');
-    }
+    useEffect(() => {
+     
+        if ( itemType ) {
+            const gallery = async(path) => await fetch( path )
+                    .then( response => response.json() )
+                    .then( data => setCount( data.images.length ) )
+                    .then( () => setLoading(false) )
+            
+            gallery(galleryPath)
+            
+        }
+        //checkImage(imgPath, setImgUrl);
 
-    testImage(imgPath);
-
-    const typeCategory = type === 'category' ? true : false;
-
-    const imgSrc = imgUrl ? imgUrl : img;
-
+    }, [galleryPath])
 
     useEffect( () => {
-
-        const gallery = async() => {
-            await fetch(galleryPath)
-            .then( resp => resp.json() )
-            .then( data => setGallery(data) )
+        if ( itemType ) {
+            galleryCount(count, label)
         }
-        gallery();
-      
+    }, [count])
 
-	}, [ galleryPath ] );
+    //const imgSrc = imgUrl ? imgUrl :img; 
+
+    const lastPart = getUrlLastPart(imgPath);
+    const imgSrc = lastPart !== 'undefined' ? imgPath : img;
 
 
 
     return (
         
         <div className={`${styles.itemWrapper} position-relative`}>
-            <Counter count={gallery.images && gallery.images.length}/>
-            <img src={imgSrc} alt="pic" />
+            
+            { loading && <div className={styles.loadingIcon}>
+                    <Loading />
+                </div> }
 
-            { typeCategory &&
+            { itemType && 
+                    <Counter count={count} /> }
+
+            <img src={imgSrc} alt="pic" />
+    
+            { itemType &&
                 <div className={`${styles.caption} center-inner`}>
                     <h6>{label}</h6>
                 </div>
             }
+            <Trash galleryPath={galleryPath} handleTrashClick={handleTrashClick}/>
 
         </div>
         

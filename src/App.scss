@@ -19,6 +19,9 @@
   & .btn-close:focus {
     box-shadow: 0;
   }
+  & a, a:hover {
+    color: $color-text;
+  }
 }
 * {
   outline: 0;

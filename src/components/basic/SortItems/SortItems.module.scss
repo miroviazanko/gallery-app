@@ -1,0 +1,19 @@
+@import '../../../Sass/custom.scss';
+
+.sortItems {
+    & input {
+        display: none;
+    }
+    & label {
+        width: 100%;        
+        //border: 1px solid $color-shadow;
+        //background-color: $color-radio;
+        border-radius: 3px;
+        margin-bottom: .3rem;
+        cursor: pointer;
+    }
+    & .sorting button:focus {
+        background-color: $color-radio;
+        border: 0;
+    }
+}

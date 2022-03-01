@@ -3,11 +3,15 @@ import styles from './ButtonFile.module.scss';
 
 
 
-export default function ButtonFile() {
+export default function ButtonFile({ uploadedFilesImg }) {
 
-    const hiddenFileInput = useRef();
+    const hiddenFileInput = useRef();   
 
-    const handleBtnClick = (e) => {
+    const handleFileInput = (e) => {        
+        uploadedFilesImg(e, 'input')
+    }
+
+    const handleFileBtn = (e) => {
         e.preventDefault();
         hiddenFileInput.current.click();
     }
@@ -15,18 +19,18 @@ export default function ButtonFile() {
     return (
         <div className={styles.buttonFile}>
             <form encType="multipart/form-data"
-                    /*</div>onSubmit={}*/>
+                  /*</div>onSubmit={ (e) => handleSubmitFileForm(e)}*/ >
                 <input id="upload"
                     ref={hiddenFileInput}
                     type="file"
                     multiple
                     name="file"
                     accept="image/*"
-                    /* onChange={} */
+                    onChange={ (e) => handleFileInput(e) } 
                 />
                 <button className={styles.coverBtn}
-                        onClick={ (e) => handleBtnClick(e) }>
-                    Vyberte súbory
+                        onClick={ (e) => handleFileBtn(e) }>
+                        Vyberte súbory
                 </button>
             </form>
         </div>
