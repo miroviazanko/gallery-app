@@ -39,9 +39,6 @@ export default function Item({label, type, imgPath, galleryPath, handleTrashClic
         }
     }, [count])
 
-
-    console.log(count)
-
     //const imgSrc = imgUrl ? imgUrl :img; 
 
     const lastPart = getUrlLastPart(imgPath);

@@ -7,4 +7,9 @@
     & .dragDrop {
         cursor: copy;
     }
+    & .insertDragDrop {
+        transition: all .5s ease-in-out;
+        background: $color-dragDropShadow;
+        box-shadow: 0px 0px 20px 20px $color-dragDropShadow;
+    }
 }

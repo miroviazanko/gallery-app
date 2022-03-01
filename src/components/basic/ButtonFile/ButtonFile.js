@@ -3,20 +3,12 @@ import styles from './ButtonFile.module.scss';
 
 
 
-export default function ButtonFile({ uploadedFilesFormData }) {
+export default function ButtonFile({ uploadedFilesImg }) {
 
     const hiddenFileInput = useRef();   
 
-    const handleFileInput = (e) => {
-        
-        let uploadedFiles = Array.from( e.target.files );
-
-        const formData = new FormData()
-
-        uploadedFiles.forEach((file, i) => {
-            formData.append(i, file)
-        })
-        uploadedFilesFormData(formData)
+    const handleFileInput = (e) => {        
+        uploadedFilesImg(e, 'input')
     }
 
     const handleFileBtn = (e) => {

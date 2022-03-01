@@ -31,9 +31,10 @@ export default function SortItems({sortByValue}) {
     }
 
     return (
-        <Accordion className={`${styles.sortItems} my-4`} onChange={(e) => handleSubmitSort(e)}>
-            <AccordionHeader bg='color-shadow'>Usporiadať:</AccordionHeader>
-            <AccordionBody bg='color-shadow'>{radiosElement}</AccordionBody>
+        <Accordion className={`${styles.sortItems} my-4`} onChange={(e) => handleSubmitSort(e)}
+                   bsPrefix='sorting'>
+            <AccordionHeader className='bg-primary'>Usporiadať:</AccordionHeader>
+            <AccordionBody>{radiosElement}</AccordionBody>
         </Accordion>
     )
 

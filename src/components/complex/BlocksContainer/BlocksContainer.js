@@ -90,6 +90,7 @@ export default function BlocksContainer({type, apiPreview, path, object, lightBo
 
     const uploadedImages = (formData) => {
         toggleModal();
+        console.log(formData)
         addImage( path, formData )        
     }
 
@@ -127,19 +128,16 @@ export default function BlocksContainer({type, apiPreview, path, object, lightBo
                 break;
         }
     }
+    
 
     const galleryCount = (count, gallName) => {
-
-        console.log(count, gallName)
-
-       if ( count ) {
-            setDatas( datas => {
-                return {
-                    galleries: datas.galleries.map( (gallery, i) => gallery.name === gallName ? { ...gallery, count } : gallery)
-                }
-            })
+        if ( count ) {
+                setDatas( datas => {
+                    return {
+                        galleries: datas.galleries.map( (gallery, i) => gallery.name === gallName ? { ...gallery, count } : gallery)
+                    }
+                })
         }
-
     }
 
     const items = datas ? datas[object].map( ( cat,i ) => {
@@ -170,8 +168,6 @@ export default function BlocksContainer({type, apiPreview, path, object, lightBo
     }) : null
 
     const imagesArr = datas && !blockType ? datas.images.map( img => [lightBoxImg + getUrlLastPart(path) + '/' + img.path] ) : null;
-
-    console.log(datas)     
 
     return (
         <>           

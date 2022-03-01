@@ -87,9 +87,6 @@ export default function App() {
 
 	return (
 		<div className="App">
-
-				
-
 				<Container fluid="md" className='text-start py-5'>				
 					<h1 className='pt-5 pb-3'>Fotogaléria</h1>
 
@@ -112,15 +109,11 @@ export default function App() {
 							{ routes }
 							
 							<Route path="*" element={<NoMatch />}></Route>
-							{/* <Route path="/error" element={<NoMatch />}></Route> */}
+							
 						</Routes> 
 						
-					}
-
-					{ /* error && <Navigate replace to="/error" element={<NoMatch/>} /> */ }
-										
+					}										
 				</Container>
-
 		</div>
 	);
 }
